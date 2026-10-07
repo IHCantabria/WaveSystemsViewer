@@ -33,6 +33,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+// Base map used for every plot. OpenStreetMap tiles do not need an API key,
+// so it overrides the style saved in the JSON files (carto-positron)
+const BASE_MAP_STYLE = 'open-street-map';
+
+function setBaseMap(layout) {
+    if (layout && layout.mapbox) {
+        layout.mapbox.style = BASE_MAP_STYLE;
+    }
+}
+
 // Asynchronous function to load JSON file
 function loadJSONFile(filePath) {
     return fetch(filePath)
@@ -85,6 +95,7 @@ function myFunction(jsonFilePath, buttonElement) {
                 dataj = data;
                 console.log('JSON data loaded:', dataj);
             }
+            setBaseMap(dataj.layout);
             Plotly.purge(chart1);
             Plotly.newPlot("chart1", graphs1.data, dataj.layout);
             Plotly.plot("chart1", dataj.data, dataj.layout);
@@ -105,6 +116,7 @@ function myFunction_reset_view(jsonFilePath, buttonElement) {
                 dataj = data;
                 console.log('JSON data loaded:', dataj);
             }
+            setBaseMap(dataj.layout);
             Plotly.purge(chart1);
             Plotly.newPlot("chart1", dataj, {});
         })
